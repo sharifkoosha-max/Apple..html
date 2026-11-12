@@ -1,0 +1,326 @@
+g<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apple Store</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+:root{--bg:#080d19;--panel:#14213a;--panel2:#101a2e;--line:#293d5d;--blue:#69c9ff;--muted:#aabbd5;--grad:linear-gradient(90deg,#168bff,#7951ef)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Vazirmatn,sans-serif}
+body{background:var(--bg);color:#fff;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+header{background:#101a2ef2;backdrop-filter:blur(12px);padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:18px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.logo{color:var(--blue);font-size:24px;font-weight:800;white-space:nowrap;cursor:pointer}
+nav{display:flex;gap:17px;flex-wrap:wrap}
+.header-search{flex:1;max-width:300px;min-width:170px;position:relative}
+.header-search input{width:100%;padding:10px 13px;border-radius:10px;border:1px solid var(--line);background:#0c1628;color:#fff;outline:none}
+.search-suggestions{display:none;position:absolute;top:calc(100% + 8px);right:0;left:0;z-index:50;background:#14213a;border:1px solid #38557d;border-radius:13px;padding:8px;box-shadow:0 14px 35px #0008;max-height:360px;overflow:auto}
+.search-suggestions.show{display:block}.search-suggestion{display:flex;align-items:center;gap:10px;width:100%;padding:9px;border:0;border-radius:9px;background:transparent;color:#fff;text-align:right;cursor:pointer}.search-suggestion:hover{background:#203858}.search-suggestion img{width:42px;height:42px;object-fit:contain;background:#0c1628;border-radius:8px}.search-empty{padding:14px;text-align:center;color:#ffbdc8;line-height:1.9}.search-hint{padding:7px 10px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
+.about-card{background:linear-gradient(145deg,#192842,#10192b);border:1px solid var(--line);border-radius:18px;padding:28px;line-height:2.2;max-width:760px}
+.about-card h1{color:var(--blue);margin-bottom:14px}
+.about-address{margin-top:18px;padding:18px;background:#0d192c;border:1px solid #2a4264;border-radius:12px;font-size:18px}
+@media(max-width:800px){.header-search{order:4;max-width:none;width:100%;flex-basis:100%}}
+nav a{color:#dce6f7;font-size:14px}
+nav a:hover{color:var(--blue)}
+.header-actions{display:flex;gap:9px;align-items:center}
+.btn,.primary{border:0;padding:10px 16px;border-radius:10px;color:#fff;background:var(--grad)}
+.cart{background:#202e48;padding:10px 14px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.hero{padding:72px 20px;text-align:center;background:radial-gradient(circle at 20% 20%,#173f70,transparent 40%),radial-gradient(circle at 80% 80%,#48216d,transparent 40%),#10182b}
+.hero h1{font-size:clamp(30px,5vw,46px);margin-bottom:14px}.hero h1 span{color:var(--blue)}.hero p{color:#b8c8dc}
+.hero button{margin-top:24px;padding:13px 28px;border:0;border-radius:12px;background:var(--grad);color:#fff;font-size:16px}
+.section{padding:42px 6%;max-width:1500px;margin:auto}
+.section-title{font-size:27px;margin-bottom:10px}.section-subtitle{color:#899bb8;margin-bottom:25px}
+.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:12px}
+.category{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px 8px;text-align:center;cursor:pointer;transition:.2s}
+.category:hover,.category.active{border-color:var(--blue);background:#1b3153;transform:translateY(-3px)}
+.category .emoji{display:block;font-size:30px;margin-bottom:8px}
+.search-box{display:flex;gap:10px;margin:22px 0}
+.search-box input,.modal-content input{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:#0c1628;color:#fff;outline:none}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+.product{min-width:0;display:flex;flex-direction:column;align-items:stretch}
+.product h3{min-height:48px}
+.product-actions{margin-top:auto}
+.page-turn{animation:pageTurn .48s cubic-bezier(.2,.75,.25,1) both;transform-origin:right center;backface-visibility:hidden}
+@keyframes pageTurn{0%{opacity:.15;transform:perspective(1100px) rotateY(-13deg) translateX(-18px)}55%{opacity:1}100%{opacity:1;transform:perspective(1100px) rotateY(0) translateX(0)}}
+.page-turn-back{animation:pageTurnBack .48s cubic-bezier(.2,.75,.25,1) both}
+@keyframes pageTurnBack{0%{opacity:.15;transform:perspective(1100px) rotateY(13deg) translateX(18px)}100%{opacity:1;transform:perspective(1100px) rotateY(0) translateX(0)}}
+.spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}
+.spec-cell{background:#13233b;border:1px solid #2a4264;border-radius:10px;padding:10px;text-align:right}
+.spec-cell b{display:block;color:#80d2ff;font-size:12px;margin-bottom:4px}
+.spec-cell span{font-size:13px;color:#e2ebf8}
+.price-date{font-size:11px;color:#9aacc7;margin-top:8px}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.spec-grid{grid-template-columns:1fr}}
+.product{background:linear-gradient(145deg,#192842,#10192b);border:1px solid var(--line);border-radius:17px;padding:16px;text-align:center;transition:.2s;cursor:pointer}
+.product:hover{transform:translateY(-5px);border-color:var(--blue);box-shadow:0 10px 30px #168bff20}
+.product img{width:100%;height:175px;object-fit:contain;margin-bottom:12px}
+.product h3{font-size:16px;margin-bottom:8px;min-height:48px}
+.price{color:var(--blue);font-weight:700;margin:10px 0 13px}
+.product-actions{display:flex;gap:8px}.product-actions button{flex:1;padding:10px 7px;border:0;border-radius:9px;color:white;background:var(--grad);font-size:13px}
+.product-actions .details{background:#293d5d}
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:26px;flex-wrap:wrap}
+.pagination button{background:#1b2b46;color:white;border:1px solid var(--line);padding:8px 13px;border-radius:9px}
+.pagination button.active{background:var(--grad);border-color:transparent}
+.page{display:none;min-height:60vh}.page.active{display:block}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.back{background:#263a59;border:1px solid var(--line);color:white;padding:9px 14px;border-radius:9px}
+.detail-layout{display:grid;grid-template-columns:minmax(260px,1fr) minmax(280px,1.1fr);gap:35px;align-items:start}
+.detail-image{background:linear-gradient(145deg,#192842,#10192b);border:1px solid var(--line);border-radius:20px;padding:22px;min-height:330px;display:grid;place-items:center}
+.detail-image img{width:100%;height:320px;object-fit:contain}
+.detail-info{background:var(--panel);border:1px solid var(--line);padding:25px;border-radius:18px}
+.detail-info h1{font-size:27px;margin-bottom:12px}.detail-info p{color:#c0cde0;line-height:2;margin:12px 0}
+.specs{padding:15px;background:#0d192c;border-radius:12px;margin:18px 0;color:#b7c8df;line-height:2}
+.detail-info .primary{width:100%;padding:13px;margin-top:10px}
+.cart-list{display:grid;gap:12px}
+.cart-item{display:flex;align-items:center;gap:15px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.cart-item img{width:85px;height:80px;object-fit:contain}.cart-item-info{flex:1}.cart-item-info p{color:var(--blue);margin-top:5px}
+.cart-item button,.remove{background:#7b3048;color:white;border:0;border-radius:8px;padding:8px 12px}
+.empty{background:var(--panel);border:1px dashed #486183;border-radius:18px;padding:42px 20px;text-align:center}
+.empty .big{font-size:48px;margin-bottom:12px}.empty p{color:var(--muted);margin:10px 0 20px}
+.support-link{display:inline-block;background:#168bff;color:#fff;padding:11px 18px;border-radius:10px}
+.cart-summary{margin-top:20px;background:var(--panel);padding:20px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:40;justify-content:center;align-items:center;padding:15px}
+.modal-content{background:var(--panel);border:1px solid #38557d;border-radius:20px;width:100%;max-width:430px;padding:28px;position:relative}
+.close{position:absolute;left:18px;top:10px;font-size:26px;cursor:pointer;color:var(--muted)}
+.modal-content h2{text-align:center;margin-bottom:22px;color:var(--blue)}
+.tabs{display:flex;gap:10px;margin-bottom:18px}.tabs button{flex:1;padding:10px;background:#243653;border:0;color:white;border-radius:8px}.tabs button.active{background:#167bff}
+.modal-content input{margin-bottom:12px}
+.remember{display:flex;align-items:center;gap:9px;color:#c8d5e8;font-size:14px;margin:3px 0 16px}.remember input{width:17px;height:17px;margin:0;accent-color:#168bff}
+.submit{width:100%;padding:13px;background:var(--grad);border:0;border-radius:10px;color:white;font-size:16px}
+.note{font-size:11px;color:#8fa2c1;margin-top:14px;line-height:1.8;text-align:center}
+footer{background:var(--panel2);padding:35px 7%;border-top:1px solid var(--line);color:var(--muted);text-align:center;margin-top:30px}
+footer h2{color:var(--blue);margin-bottom:12px}footer p{margin:8px}
+.toast{position:fixed;bottom:20px;left:20px;background:#173c5b;border:1px solid #3e86bd;color:white;padding:12px 18px;border-radius:10px;z-index:60;display:none}
+.price-note{font-size:12px;color:#8fa2c1;margin-top:14px;line-height:1.8}
+@media(max-width:800px){header{flex-wrap:wrap}nav{order:3;width:100%;justify-content:center}.detail-layout{grid-template-columns:1fr}.hero{padding:55px 15px}.section{padding:32px 5%}}
+@media(max-width:480px){.header-actions{width:100%;justify-content:space-between}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product{padding:10px}.product img{height:125px}.product h3{font-size:14px}.product-actions{flex-direction:column}.cart-item{align-items:flex-start}.cart-item img{width:65px;height:65px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo" onclick="goHome()"> Apple Store</div>
+ <nav><a href="#" onclick="goHome()">خانه</a><a href="#categories" onclick="goHome()">دسته‌بندی</a><a href="#products-section" onclick="goHome()">محصولات</a><a href="#contact" onclick="goHome()">تماس با ما</a><a href="#about" onclick="showAbout()">درباره ما</a></nav>
+ <div class="header-search"><input id="search" type="search" placeholder="جستجوی محصول..." autocomplete="off" aria-label="جستجوی محصول"><div id="searchSuggestions" class="search-suggestions" role="listbox"></div></div>
+ <div class="header-actions"><div class="cart" onclick="showCart()">🛒 سبد خرید <b id="cartCount">0</b></div><button class="btn" onclick="openLogin()">ورود / ثبت‌نام</button></div>
+</header>
+
+<main>
+<section id="homePage" class="page active">
+ <section class="hero"><h1>Welcome to <span>Apple Store</span></h1><p>دنیای محصولات اپل، در یک تجربه خرید متفاوت</p><button onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">مشاهده محصولات</button></section>
+ <section class="section" id="categories"><h2 class="section-title">دسته‌بندی محصولات</h2><p class="section-subtitle">دسته موردنظرت رو انتخاب کن</p><div class="categories" id="categoryList"></div></section>
+ <section class="section" id="products-section"><h2 class="section-title">محصولات Apple</h2><p class="section-subtitle">برای دیدن مشخصات کامل روی محصول بزن</p>
+ <div class="products" id="productList"></div><div class="pagination" id="pagination"></div>
+ <p class="price-note">قیمت‌ها به تومان و بر اساس آخرین داده‌های قابل‌دسترس بازار درج شده‌اند؛ قیمت نهایی با توجه به حافظه، رجیستری و موجودی فروشنده ممکن است تغییر کند.</p>
+ </section>
+ <footer id="contact"><h2> Apple Store</h2><p>فروشگاه تخصصی محصولات اپل</p><p>پشتیبانی: <a href="https://t.me/Kooshash" target="_blank" rel="noopener">@Kooshash</a> <span aria-hidden="true"> | </span> <a href="https://instagram.com/koosha_shh" target="_blank" rel="noopener">اینستاگرام: @koosha_shh</a></p><p>© 2026 Apple Store</p></footer>
+</section>
+
+<section id="detailPage" class="page section">
+ <div class="page-head"><button class="back" onclick="goHome()">← بازگشت به فروشگاه</button><span>جزئیات محصول</span></div>
+ <div id="detailContent"></div>
+</section>
+
+<section id="cartPage" class="page section">
+ <div class="page-head"><div><h1 class="section-title">سبد خرید من</h1><p class="section-subtitle">محصولاتی که انتخاب کرده‌ای اینجا نمایش داده می‌شوند.</p></div><button class="back" onclick="goHome()">ادامه خرید</button></div>
+ <div id="cartContent"></div>
+</section>
+
+<section id="aboutPage" class="page section">
+ <div class="page-head"><button class="back" onclick="goHome()">← بازگشت به فروشگاه</button><span>درباره ما</span></div>
+ <div class="about-card"><h1>درباره Apple Store</h1><p>به Apple Store خوش آمدید. اینجا می‌توانید محصولات اپل را مشاهده کنید و مشخصات هر محصول را بررسی کنید.</p><div class="about-address"><b>آدرس فروشگاه:</b><br>تهران، پاساژ پالادیوم، طبقه دوم، واحد ۱۸</div><p style="margin-top:16px">برای ارتباط و پشتیبانی می‌توانید از طریق تلگرام با ما در تماس باشید:</p><a class="support-link" href="https://t.me/Kooshash" target="_blank" rel="noopener">پشتیبانی در تلگرام @Kooshash</a> <a class="support-link" href="https://instagram.com/koosha_shh" target="_blank" rel="noopener" style="margin:8px 5px 0;background:#9b3e91">اینستاگرام @koosha_shh</a></div>
+</section>
+</main>
+
+<div id="profile" style="display:none;background:#14213a;border:1px solid #354b6b;border-radius:15px;padding:25px;margin:30px 7%;text-align:center"><h2>پنل کاربری من</h2><p id="profileName"></p><button onclick="logout()" class="back" style="margin-top:14px">خروج از حساب</button></div>
+
+<div class="modal" id="loginModal"><div class="modal-content"><span class="close" onclick="closeLogin()">×</span><h2> Apple Account</h2>
+ <div class="tabs"><button class="active" id="loginTab" onclick="switchTab('login')">ورود</button><button id="signupTab" onclick="switchTab('signup')">ثبت‌نام</button></div>
+ <form id="authForm"><input id="username" type="text" placeholder="نام کاربری" required><input id="contactInput" type="text" placeholder="شماره تلفن یا ایمیل" required><input id="password" type="password" placeholder="رمز عبور" required>
+ <label class="remember"><input id="rememberMe" type="checkbox"> مرا به خاطر بسپار</label><button class="submit" type="submit" id="submitBtn">ورود به حساب</button></form>
+ <p class="note">این نسخه نمایشی است؛ ورود و ثبت‌نام واقعی به سرور امن و پایگاه داده نیاز دارد. گزینهٔ «مرا به خاطر بسپار» در این نسخه فقط وضعیت نمایشی ورود را در همین مرورگر نگه می‌دارد.</p>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const IMG={
+ iphone:"https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=700",
+ phone2:"https://images.unsplash.com/photo-1696446701796-da61225697cc?w=700",
+ airpods:"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=700",
+ ipad:"https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=700",
+ watch:"https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=700",
+ mac:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=700",
+ accessory:"https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=700",
+ vision:"https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=700",
+ tv:"https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=700"
+};
+const rawCatalog=[
+["iPhone 18 Pro Max","iphone","گوشی","نسل پرچم‌دار آیفون با نمایشگر بزرگ و دوربین پیشرفته.",IMG.iphone],
+["iPhone 18 Pro","iphone","گوشی","مدل حرفه‌ای آیفون ۱۸ با امکانات دوربین و عملکرد پیشرفته.",IMG.iphone],
+["iPhone 18","iphone","گوشی","مدل استاندارد خانواده آیفون ۱۸.",IMG.phone2],
+["iPhone 18 Air","iphone","گوشی","مدل باریک خانواده آیفون ۱۸.",IMG.phone2],
+["iPhone 17 Pro Max","iphone","گوشی","مدل بزرگ و حرفه‌ای نسل ۱۷.",IMG.iphone],
+["iPhone 17 Pro","iphone","گوشی","مدل حرفه‌ای نسل ۱۷.",IMG.iphone],
+["iPhone 17","iphone","گوشی","مدل استاندارد نسل ۱۷.",IMG.phone2],
+["iPhone 17e","iphone","گوشی","مدل اقتصادی‌تر خانواده آیفون ۱۷.",IMG.phone2],
+["iPhone 16 Pro Max","iphone","گوشی","آیفون حرفه‌ای با نمایشگر بزرگ.",IMG.iphone],
+["iPhone 16 Pro","iphone","گوشی","مدل حرفه‌ای نسل ۱۶.",IMG.iphone],
+["iPhone 16 Plus","iphone","گوشی","مدل بزرگ‌تر آیفون ۱۶.",IMG.phone2],
+["iPhone 16","iphone","گوشی","مدل استاندارد آیفون ۱۶.",IMG.phone2],
+["iPhone 16e","iphone","گوشی","مدل اقتصادی خانواده آیفون ۱۶.",IMG.phone2],
+["iPhone 15 Pro Max","iphone","گوشی","مدل پرچم‌دار نسل ۱۵ با نمایشگر بزرگ.",IMG.iphone],
+["iPhone 15 Pro","iphone","گوشی","مدل حرفه‌ای نسل ۱۵.",IMG.iphone],
+["iPhone 15 Plus","iphone","گوشی","مدل بزرگ‌تر آیفون ۱۵.",IMG.phone2],
+["iPhone 15","iphone","گوشی","مدل استاندارد آیفون ۱۵.",IMG.phone2],
+["AirPods Pro 3","airpods","صوتی","هدفون بی‌سیم حرفه‌ای با حذف نویز فعال.",IMG.airpods],
+["AirPods 4 با ANC","airpods","صوتی","ایرپاد نسل چهارم با حذف نویز فعال.",IMG.airpods],
+["AirPods 4","airpods","صوتی","ایرپاد نسل چهارم.",IMG.airpods],
+["AirPods Max 2","airpods","صوتی","هدفون روگوشی پریمیوم اپل.",IMG.airpods],
+["AirPods Pro 2","airpods","صوتی","هدفون حرفه‌ای نسل دوم.",IMG.airpods],
+["AirPods Max","airpods","صوتی","هدفون روگوشی اپل.",IMG.airpods],
+["iPad Pro 13-inch","ipad","تبلت","آیپد حرفه‌ای با نمایشگر بزرگ برای کارهای سنگین.",IMG.ipad],
+["iPad Pro 11-inch","ipad","تبلت","آیپد حرفه‌ای جمع‌وجورتر.",IMG.ipad],
+["iPad Air 13-inch","ipad","تبلت","آیپد ایر با نمایشگر بزرگ.",IMG.ipad],
+["iPad Air 11-inch","ipad","تبلت","آیپد ایر برای کار و سرگرمی.",IMG.ipad],
+["iPad mini","ipad","تبلت","آیپد کوچک و قابل‌حمل.",IMG.ipad],
+["iPad (A16)","ipad","تبلت","آیپد استاندارد برای استفاده روزمره.",IMG.ipad],
+["Apple Watch Ultra 4","watch","ساعت","ساعت مقاوم و حرفه‌ای اپل.",IMG.watch],
+["Apple Watch Series 12","watch","ساعت","ساعت هوشمند سری اصلی اپل.",IMG.watch],
+["Apple Watch SE 3","watch","ساعت","گزینه اقتصادی‌تر ساعت اپل.",IMG.watch],
+["MacBook Pro 16-inch","mac","کامپیوتر","لپ‌تاپ حرفه‌ای اپل با نمایشگر بزرگ.",IMG.mac],
+["MacBook Pro 14-inch","mac","کامپیوتر","لپ‌تاپ حرفه‌ای و قدرتمند اپل.",IMG.mac],
+["MacBook Air 15-inch","mac","کامپیوتر","لپ‌تاپ سبک اپل با نمایشگر بزرگ.",IMG.mac],
+["MacBook Air 13-inch","mac","کامپیوتر","لپ‌تاپ سبک برای استفاده روزمره و کاری.",IMG.mac],
+["iMac","mac","کامپیوتر","کامپیوتر رومیزی یکپارچه اپل.",IMG.mac],
+["Mac mini","mac","کامپیوتر","کامپیوتر رومیزی کوچک اپل.",IMG.mac],
+["Mac Studio","mac","کامپیوتر","سیستم دسکتاپ حرفه‌ای اپل.",IMG.mac],
+["Mac Pro","mac","کامپیوتر","سیستم دسکتاپ قدرتمند اپل.",IMG.mac],
+["Apple Vision Pro","vision","گجت","هدست محاسبات فضایی اپل.",IMG.vision],
+["Apple TV 4K","tv","گجت","دستگاه پخش محتوای تصویری اپل.",IMG.tv],
+["HomePod","accessories","خانه هوشمند","اسپیکر هوشمند اپل.",IMG.accessory],
+["HomePod mini","accessories","خانه هوشمند","اسپیکر هوشمند کوچک اپل.",IMG.accessory],
+["AirTag (4-pack)","accessories","لوازم جانبی","بسته چهار عددی ردیاب هوشمند اپل.",IMG.accessory],
+["AirTag","accessories","لوازم جانبی","ردیاب هوشمند وسایل شخصی.",IMG.accessory],
+["Magic Keyboard","accessories","لوازم جانبی","کیبورد بی‌سیم اپل.",IMG.accessory],
+["Magic Mouse","accessories","لوازم جانبی","ماوس بی‌سیم اپل.",IMG.accessory],
+["Apple Pencil Pro","accessories","لوازم جانبی","قلم حرفه‌ای سازگار با آیپدهای پشتیبانی‌شده.",IMG.accessory],
+["Apple Pencil (USB-C)","accessories","لوازم جانبی","قلم اپل با اتصال USB-C.",IMG.accessory],
+["Magic Trackpad","accessories","لوازم جانبی","ترک‌پد بی‌سیم اپل.",IMG.accessory],
+["20W USB-C Power Adapter","accessories","لوازم جانبی","آداپتور شارژ USB-C اپل.",IMG.accessory],
+["35W Dual USB-C Power Adapter","accessories","لوازم جانبی","آداپتور دو درگاه USB-C.",IMG.accessory],
+["USB-C to USB-C Cable","accessories","لوازم جانبی","کابل شارژ و انتقال داده USB-C.",IMG.accessory],
+["MagSafe Charger","accessories","لوازم جانبی","شارژر بی‌سیم MagSafe.",IMG.accessory],
+["iPhone Silicone Case","accessories","لوازم جانبی","قاب سیلیکونی سازگار با مدل‌های منتخب آیفون.",IMG.accessory]
+ ];
+const priceBook={
+ "iPhone 18 Pro Max":"از ۴۱۰,۰۰۰,۰۰۰ تومان",
+ "iPhone 17 Pro Max":"از ۵۸۸,۰۰۰,۰۰۰ تومان",
+ "iPhone 17 Pro":"از ۵۷۸,۵۰۰,۰۰۰ تومان",
+ "iPhone 17":"از ۴۱۳,۹۰۰,۰۰۰ تومان",
+ "iPhone 16 Pro Max":"از ۵۳۱,۳۰۰,۰۰۰ تومان",
+ "iPhone 16 Plus":"از ۱۵۲,۰۰۰,۰۰۰ تومان",
+ "iPhone 16":"از ۳۵۸,۰۰۰,۰۰۰ تومان",
+ "AirPods 4":"۳۰,۸۹۰,۰۰۰ تومان",
+ "AirPods 4 با ANC":"۴۰,۲۹۰,۰۰۰ تومان",
+ "AirPods Max":"۱۰۸,۸۹۰,۰۰۰ تومان",
+ "MacBook Air 13-inch":"از ۱۷۶,۸۹۰,۰۰۰ تومان",
+ "MacBook Air 15-inch":"از ۱۸۱,۵۹۰,۰۰۰ تومان"
+};
+const estimatedPrices={iphone:"قیمت حدودی: از ۲۵۰,۰۰۰,۰۰۰ تومان",airpods:"قیمت حدودی: از ۳۰,۰۰۰,۰۰۰ تومان",ipad:"قیمت حدودی: از ۷۰,۰۰۰,۰۰۰ تومان",watch:"قیمت حدودی: از ۶۵,۰۰۰,۰۰۰ تومان",mac:"قیمت حدودی: از ۱۷۶,۰۰۰,۰۰۰ تومان",vision:"قیمت حدودی: از ۳۵۰,۰۰۰,۰۰۰ تومان",tv:"قیمت حدودی: از ۱۲,۰۰۰,۰۰۰ تومان",accessories:"قیمت حدودی: از ۲,۰۰۰,۰۰۰ تومان"};
+const catalog=rawCatalog.map((x,i)=>({id:i,name:x[0],cat:x[1],type:x[2],description:x[3],img:x[4],price:priceBook[x[0]]||estimatedPrices[x[1]]||"قیمت تقریبی: ۱۰,۰۰۰,۰۰۰ تومان",priceEstimate:!priceBook[x[0]]}));
+
+const cats=[["all","✨","همه محصولات"],["iphone","📱","iPhone"],["airpods","🎧","AirPods"],["ipad","📲","iPad"],["watch","⌚","Apple Watch"],["mac","💻","Mac"],["accessories","🔌","لوازم جانبی"],["vision","🥽","Vision"],["tv","📺","Apple TV"]];
+let selectedCategory="all",currentPage=1,cart=[],currentTab="login",currentProduct=null;
+const perPage=6;
+let activeSearchQuery="";
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display="none",2400)}
+function showPage(id,turn="next"){document.querySelectorAll("main>.page").forEach(p=>p.classList.remove("active"));const el=document.getElementById(id);el.classList.add("active");el.classList.remove("page-turn","page-turn-back");void el.offsetWidth;el.classList.add(turn==="back"?"page-turn-back":"page-turn");window.scrollTo({top:0,behavior:"smooth"})}
+function goHome(){showPage("homePage","back")}
+function showAbout(){showPage("aboutPage","next")}
+function renderCategories(){document.getElementById("categoryList").innerHTML=cats.map(c=>`<div class="category ${c[0]===selectedCategory?'active':''}" onclick="filterProducts('${c[0]}')"><span class="emoji">${c[1]}</span>${c[2]}</div>`).join("")}
+function normalizeSearch(value){return String(value||"").toLowerCase().replace(/[\u200c\s-]+/g,"").trim()}
+function matchingProducts(query){
+ const q=normalizeSearch(query);
+ if(!q)return catalog.filter(p=>selectedCategory==="all"||p.cat===selectedCategory);
+ return catalog.filter(p=>[p.name,p.description,p.type].some(v=>normalizeSearch(v).includes(q)));
+}
+function filteredProducts(){return matchingProducts(activeSearchQuery)}
+function renderProducts(){
+ const items=filteredProducts(),pages=Math.max(1,Math.ceil(items.length/perPage));if(currentPage>pages)currentPage=pages;
+ const slice=items.slice((currentPage-1)*perPage,currentPage*perPage);
+ const title=document.querySelector("#products-section .section-title");
+ const subtitle=document.querySelector("#products-section .section-subtitle");
+ if(activeSearchQuery){title.textContent="نتایج جستجو برای: "+activeSearchQuery;subtitle.textContent=items.length?items.length+" محصول پیدا شد. برای مشاهده جزئیات روی محصول بزن.":"محصولی با این عبارت پیدا نشد."}
+ else {title.textContent="محصولات Apple";subtitle.textContent="برای دیدن مشخصات کامل روی محصول بزن"}
+ document.getElementById("productList").innerHTML=slice.length?slice.map(p=>`<article class="product" onclick="openProduct(${p.id})"><img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='${IMG.accessory}'"><h3>${p.name}</h3><div class="price">${p.price}</div><div class="product-actions"><button class="details" onclick="event.stopPropagation();openProduct(${p.id})">مشاهده جزئیات</button><button onclick="event.stopPropagation();addCart(${p.id})">افزودن به سبد</button></div></article>`).join("") :'<div class="empty"><h3>این آیتم موجود نیست</h3><p>محصول دیگری را جستجو کن یا دسته‌بندی‌ها را ببین.</p></div>';
+ document.getElementById("pagination").innerHTML=pages>1?`<button ${currentPage===1?'disabled':''} onclick="turnCatalogPage(${currentPage-1},'back')">قبلی</button>`+Array.from({length:pages},(_,i)=>`<button class="${currentPage===i+1?'active':''}" onclick="turnCatalogPage(${i+1},'next')">${i+1}</button>`).join("")+`<button ${currentPage===pages?'disabled':''} onclick="turnCatalogPage(${currentPage+1},'next')">بعدی</button>`:"";
+}
+function turnCatalogPage(n,direction){const pages=Math.max(1,Math.ceil(filteredProducts().length/perPage));if(n<1||n>pages)return;currentPage=n;renderProducts();const list=document.getElementById("productList");list.classList.remove("page-turn","page-turn-back");void list.offsetWidth;list.classList.add(direction==="back"?"page-turn-back":"page-turn")}
+function filterProducts(cat){
+ selectedCategory=cat;activeSearchQuery="";currentPage=1;
+ document.getElementById("search").value="";
+ hideSearchSuggestions();renderCategories();renderProducts();
+ document.getElementById("products-section").scrollIntoView({behavior:"smooth"});
+}
+const searchInput=document.getElementById("search");
+const searchSuggestions=document.getElementById("searchSuggestions");
+function hideSearchSuggestions(){searchSuggestions.classList.remove("show");searchSuggestions.innerHTML=""}
+function updateSearch(){
+ const q=searchInput.value.trim();currentPage=1;
+ if(q)selectedCategory="all";
+ activeSearchQuery=q;
+ renderCategories();renderProducts();
+ if(!q){hideSearchSuggestions();return}
+ const allMatches=matchingProducts(q),matches=allMatches.slice(0,8);
+ if(!matches.length)searchSuggestions.innerHTML='<div class="search-empty"><b>این آیتم موجود نیست</b><br><small>نام محصول دیگری را امتحان کن.</small></div>';
+ else searchSuggestions.innerHTML=matches.map(p=>`<button type="button" class="search-suggestion" onclick="chooseSearchProduct(${p.id})"><img src="${p.img}" alt=""><span><b>${p.name}</b><small>${p.type} · ${p.price}</small></span></button>`).join("")+(allMatches.length>8?'<div class="search-hint">برای دیدن همه نتایج، Enter را بزن.</div>':'');
+ searchSuggestions.classList.add("show");
+ if(!document.getElementById("homePage").classList.contains("active"))goHome();
+}
+function chooseSearchProduct(id){hideSearchSuggestions();searchInput.value=catalog.find(p=>p.id===id)?.name||"";activeSearchQuery="";openProduct(id)}
+function submitSearch(){
+ const q=searchInput.value.trim();if(!q){hideSearchSuggestions();return}
+ selectedCategory="all";activeSearchQuery=q;currentPage=1;
+ renderCategories();renderProducts();hideSearchSuggestions();
+ if(!document.getElementById("homePage").classList.contains("active"))goHome();
+ document.getElementById("products-section").scrollIntoView({behavior:"smooth"});
+}
+searchInput.addEventListener("input",updateSearch);
+searchInput.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();submitSearch()}else if(e.key==="Escape")hideSearchSuggestions()});
+document.addEventListener("click",e=>{if(!e.target.closest(".header-search"))hideSearchSuggestions()});
+renderCategories();renderProducts();
+function productSpecs(p){
+ const common={شناسه:"AP-"+String(p.id+1).padStart(4,"0"),دسته:p.type,رنگ:"بسته به موجودی",گارانتی:"بسته به فروشنده"};
+ let specific={};
+ if(p.cat==="iphone") specific={نمایشگر:p.name.includes("Pro Max")?"نمایشگر بزرگ OLED با ProMotion":"نمایشگر OLED یا Super Retina",تراشه:"نسل مربوط به همان خانواده آیفون",دوربین:p.name.includes("Pro")?"سیستم دوربین حرفه‌ای چندگانه":"دوربین اصلی چندگانه",حافظه:"۱۲۸ / ۲۵۶ / ۵۱۲ گیگابایت یا بالاتر (بسته به مدل)",اتصال:"5G، Wi‑Fi، Bluetooth",درگاه:"USB‑C"};
+ else if(p.cat==="airpods") specific={نوع:"هدفون بی‌سیم اپل",صدا:"صدای فضایی در مدل‌های پشتیبانی‌شده",حذف_نویز:p.name.includes("Pro")||p.name.includes("ANC")||p.name.includes("Max")?"فعال (ANC)":"ندارد / وابسته به مدل",شارژ:"کیس شارژ؛ نوع درگاه وابسته به نسل",سازگاری:"iPhone، iPad، Mac"};
+ else if(p.cat==="ipad") specific={نمایشگر:p.name.includes("13")?"۱۳ اینچ":"۱۱ اینچ یا اندازه اختصاصی مدل",تراشه:"Apple Silicon؛ وابسته به نسل",حافظه:"۱۲۸ گیگابایت تا ۲ ترابایت بسته به مدل",قلم:"پشتیبانی از Apple Pencil وابسته به مدل",اتصال:"Wi‑Fi و در برخی نسخه‌ها Cellular"};
+ else if(p.cat==="watch") specific={نمایشگر:"OLED / Retina",قابلیت‌ها:"پایش فعالیت، اعلان‌ها و تمرین",مقاومت:"مقاومت در برابر آب وابسته به مدل",سازگاری:"iPhone سازگار",اندازه:"بسته به نسخه و قاب"};
+ else if(p.cat==="mac") specific={پردازنده:"Apple Silicon؛ نسل وابسته به مدل",حافظه_رم:"۸ تا ۳۲ گیگابایت یا بیشتر بسته به کانفیگ",حافظه_داخلی:"۲۵۶ گیگابایت تا چند ترابایت",نمایشگر:p.name.includes("16")?"۱۶ اینچ":p.name.includes("15")?"۱۵ اینچ":p.name.includes("14")?"۱۴ اینچ":"۱۳ اینچ یا وابسته به مدل",سیستم_عامل:"macOS"};
+ else if(p.cat==="vision") specific={نوع:"هدست رایانش فضایی",نمایشگر:"نمایشگرهای micro‑OLED",کنترل:"دست، چشم و صدا",سیستم:"visionOS",کاربری:"رسانه، اپلیکیشن و تجربه فضایی"};
+ else if(p.cat==="tv") specific={کیفیت_تصویر:"4K در Apple TV 4K",سیستم:"tvOS",اتصال:"HDMI، Wi‑Fi و Bluetooth",کاربری:"پخش محتوای آنلاین"};
+ else specific={نوع:"لوازم جانبی اصلی یا سازگار اپل",اتصال:"بسته به محصول؛ USB‑C / بی‌سیم",سازگاری:"وابسته به مدل دستگاه",محتویات:"طبق بسته‌بندی همان محصول"};
+ return {...common,...specific};
+}
+function openProduct(id){const p=catalog.find(x=>x.id===id);if(!p)return;currentProduct=p;const specs=productSpecs(p);document.getElementById("detailContent").innerHTML=`<div class="detail-layout page-turn"><div class="detail-image"><img src="${p.img}" alt="${p.name}" onerror="this.src='${IMG.accessory}'"></div><div class="detail-info"><h1>${p.name}</h1><div class="price">${p.price}</div><p>${p.description}</p><div class="spec-grid">${Object.entries(specs).map(([k,v])=>`<div class="spec-cell"><b>${k.replaceAll("_"," ")}</b><span>${v}</span></div>`).join("")}</div><p class="price-date">${p.priceEstimate?"قیمت حدودی و شروع قیمت؛ نیازمند تطبیق با کانفیگ و موجودی روز":"قیمت درج‌شده بر اساس آخرین فهرست‌های بازار در آبان ۱۴۰۵"} </p><button class="primary" onclick="addCart(${p.id})">افزودن به سبد خرید</button></div></div>`;showPage("detailPage")}
+function addCart(id){const p=catalog.find(x=>x.id===id);if(!p)return;cart.push(p);updateCount();toast("محصول به سبد خرید اضافه شد");}
+function updateCount(){document.getElementById("cartCount").textContent=cart.length}
+function showCart(){renderCart();showPage("cartPage")}
+function renderCart(){
+ const root=document.getElementById("cartContent");
+ if(!cart.length){root.innerHTML=`<div class="empty"><div class="big">🛒</div><h2>سبد خریدت خالیه!</h2><p>هنوز محصولی به سبد خرید اضافه نکردی. می‌تونی به فروشگاه برگردی و محصولات رو ببینی.</p><button class="primary" onclick="goHome()">مشاهده محصولات</button><div style="margin-top:22px"><p>برای راهنمایی درباره سفارش پیام بده:</p><a class="support-link" href="https://t.me/Kooshash" target="_blank" rel="noopener">پشتیبانی در تلگرام @Kooshash</a> <a class="support-link" href="https://instagram.com/koosha_shh" target="_blank" rel="noopener" style="margin:8px 5px 0;background:#9b3e91">اینستاگرام @koosha_shh</a></div></div>`;return}
+ root.innerHTML=`<div class="cart-list">${cart.map((p,i)=>`<div class="cart-item"><img src="${p.img}" alt="${p.name}" onerror="this.src='${IMG.accessory}'"><div class="cart-item-info"><b>${p.name}</b><p>${p.price}</p></div><button onclick="removeCart(${i})">حذف</button></div>`).join("")}</div><div class="cart-summary"><b>${cart.length} محصول در سبد خرید</b><span>قیمت محصولات بر اساس قیمت درج‌شده محاسبه می‌شود.</span><a class="support-link" href="https://t.me/Kooshash" target="_blank" rel="noopener">ثبت سفارش از طریق پشتیبانی</a></div>`;
+}
+function removeCart(i){cart.splice(i,1);updateCount();renderCart()}
+function openLogin(){document.getElementById("loginModal").style.display="flex"}
+function closeLogin(){document.getElementById("loginModal").style.display="none"}
+function switchTab(tab){currentTab=tab;document.getElementById("loginTab").classList.toggle("active",tab==="login");document.getElementById("signupTab").classList.toggle("active",tab==="signup");document.getElementById("submitBtn").textContent=tab==="login"?"ورود به حساب":"ساخت حساب کاربری";document.getElementById("username").placeholder=tab==="login"?"نام کاربری":"انتخاب نام کاربری"}
+document.getElementById("authForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("username").value.trim();const remember=document.getElementById("rememberMe").checked;document.getElementById("profile").style.display="block";document.getElementById("profileName").textContent="کاربر: "+name+(remember?" — ورود در این مرورگر به خاطر سپرده می‌شود.":"");if(remember)localStorage.setItem("appleStoreDemoUser",name);else sessionStorage.setItem("appleStoreDemoUser",name);closeLogin();toast(currentTab==="login"?"فرم ورود نمایشی ثبت شد":"فرم ثبت‌نام نمایشی ثبت شد");});
+function logout(){localStorage.removeItem("appleStoreDemoUser");sessionStorage.removeItem("appleStoreDemoUser");document.getElementById("profile").style.display="none";toast("از حساب نمایشی خارج شدی")}
+(function restoreDemoSession(){const name=localStorage.getItem("appleStoreDemoUser")||sessionStorage.getItem("appleStoreDemoUser");if(name){document.getElementById("profile").style.display="block";document.getElementById("profileName").textContent="کاربر: "+name}})();
+renderCategories();renderProducts();
+</script>
+</body>
+</html>
